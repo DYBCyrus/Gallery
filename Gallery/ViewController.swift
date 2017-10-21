@@ -10,10 +10,13 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ViewController: UIViewController, ARSCNViewDelegate {
+class ViewController: UIViewController, ARSCNViewDelegate, UIImagePickerControllerDelegate,
+UINavigationControllerDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
-    
+	
+	var allNodes: [SCNNode] = []
+	
     // Create a session configuration
     let configuration = ARWorldTrackingConfiguration()
     
@@ -48,10 +51,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 		print(hitTestResult.isEmpty)
 		if !hitTestResult.isEmpty {
             self.addPortal(hitTestResult: hitTestResult.first!)
-        } else {
-            
         }
+		let nodeResults = sceneView.hitTest(touchLocation, options: nil)
+		for result in nodeResults {
+			if allNodes.contains(result.node) {
+				targetNode = result.node
+				sceneView.session.pause()
+				pickImage()
+			}
+		}
     }
+	
+	var targetNode: SCNNode?
     
     func addPortal(hitTestResult: ARHitTestResult) {
         let portalScene = SCNScene(named: "Portal.scnassets/Portal/Portal.scn")
@@ -67,6 +78,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.addWall(nodeName: "left", portalName: portalNode, imageName: "sideA.png")
 		self.addWall(nodeName: "SideGreen", portalName: portalNode, imageName: "sideDoorA.png")
         self.addWall(nodeName: "SideRed", portalName: portalNode, imageName: "sideDoorB.png")
+		self.addFrame(nodeName: "backFrames", portalName: portalNode)
+		self.addFrame(nodeName: "leftFrames", portalName: portalNode)
+		self.addFrame(nodeName: "rightFrames", portalName: portalNode)
         self.addPlane(nodeName: "roof", portalName: portalNode, imageName: "top.png")
         self.addPlane(nodeName: "low", portalName: portalNode, imageName: "bottom.png")
 		self.addLamp(nodeName: "lamp", portalName: portalNode)
@@ -77,12 +91,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 		child?.renderingOrder = 200
 	}
 	
+	func addFrame(nodeName: String, portalName: SCNNode) {
+		let child = portalName.childNode(withName: nodeName, recursively: false)
+		child?.renderingOrder = 200
+		for nodes in (child?.childNodes)! {
+			nodes.renderingOrder = 200
+			allNodes.append(nodes)
+		}
+	}
+	
 	func addWall(nodeName: String, portalName: SCNNode, imageName: String) {
         let child = portalName.childNode(withName: nodeName, recursively: false)
         child?.renderingOrder = 200
-		for nodes in (child?.childNodes)! {
-			nodes.renderingOrder = 200
-		}
 		child?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "Portal.scnassets/\(imageName).png")
         if let mask = child?.childNode(withName: "mask", recursively: false) {
 			mask.renderingOrder = 0
@@ -99,6 +119,23 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         child?.renderingOrder = 200
 		child?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "Portal.scnassets/\(imageName).png")
     }
+	
+	func pickImage() {
+		let image = UIImagePickerController()
+		image.delegate = self
+		image.sourceType = UIImagePickerControllerSourceType.photoLibrary
+		image.allowsEditing = false
+		self.present(image, animated: true)
+	}
+	
+	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+		if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+			// set node image
+			targetNode?.geometry?.firstMaterial?.diffuse.contents = image
+		}
+		self.dismiss(animated: true, completion: nil)
+		sceneView.session.run(configuration)
+	}
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
