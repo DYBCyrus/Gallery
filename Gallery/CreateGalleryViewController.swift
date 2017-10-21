@@ -9,16 +9,21 @@
 import UIKit
 import SceneKit
 import ARKit
+import FirebaseStorage
 
-class ViewController: UIViewController, ARSCNViewDelegate, UIImagePickerControllerDelegate,
+class CreateGalleryViewController: UIViewController, ARSCNViewDelegate, UIImagePickerControllerDelegate,
 UINavigationControllerDelegate {
 
+    @IBOutlet weak var planeDetected: UIVisualEffectView!
     @IBOutlet var sceneView: ARSCNView!
 	
 	var allNodes: [SCNNode] = []
+    var imageData: [Data] = []
+    let storageRef = Storage.storage().reference()
 	
     // Create a session configuration
     let configuration = ARWorldTrackingConfiguration()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +44,7 @@ UINavigationControllerDelegate {
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
 		self.sceneView.addGestureRecognizer(tapGestureRecognizer)
-
+        self.planeDetected.isHidden = true
         // Set the scene to the view
 		//sceneView.scene = scene
     }
@@ -132,10 +137,32 @@ UINavigationControllerDelegate {
 		if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
 			// set node image
 			targetNode?.geometry?.firstMaterial?.diffuse.contents = image
+            imageData.append(UIImageJPEGRepresentation(image, 0.8)!)
 		}
 		self.dismiss(animated: true, completion: nil)
 		sceneView.session.run(configuration)
 	}
+    
+    @IBAction func saveTapped(_ sender: UIButton) {
+        print("tapped")
+        print("length of imagedata is \(self.imageData.count)")
+        let metadata = StorageMetadata()
+        metadata.contentType = "image/jpeg"
+        
+        for imgdata in self.imageData {
+            storageRef.child("image/\(String().randomString(length: 20))").putData(imgdata, metadata: metadata) { (metadata, error) in
+                guard let metadata = metadata else {
+                    // Uh-oh, an error occurred!
+                    print("uhoh an error occured")
+                    return
+                }
+                // Metadata contains file metadata such as size, content-type, and download URL.
+                let downloadURL = metadata.downloadURL
+                print(downloadURL)
+            }
+            
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -170,6 +197,16 @@ UINavigationControllerDelegate {
      }
      */
     
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        guard anchor is ARPlaneAnchor else {return}
+        DispatchQueue.main.async {
+            self.planeDetected.isHidden = false
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+            self.planeDetected.isHidden = true
+        }
+    }
+    
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
         
@@ -183,5 +220,23 @@ UINavigationControllerDelegate {
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
+    }
+}
+
+extension String {
+    func randomString(length: Int) -> String {
+        
+        let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let len = UInt32(letters.length)
+        
+        var randomString = ""
+        
+        for _ in 0 ..< length {
+            let rand = arc4random_uniform(len)
+            var nextChar = letters.character(at: Int(rand))
+            randomString += NSString(characters: &nextChar, length: 1) as String
+        }
+        
+        return randomString
     }
 }

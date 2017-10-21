@@ -8,7 +8,7 @@
 
 import UIKit
 import ARKit
-class CreateARGalleryViewController: UIViewController, ARSCNViewDelegate {
+class ExploreGalleryViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     
