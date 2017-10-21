@@ -13,6 +13,7 @@
 		1866E0AC1F9B16F30061E036 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1866E0AA1F9B16F30061E036 /* Main.storyboard */; };
 		1866E0AE1F9B16F30061E036 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1866E0AD1F9B16F30061E036 /* Assets.xcassets */; };
 		1866E0B11F9B16F30061E036 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1866E0AF1F9B16F30061E036 /* LaunchScreen.storyboard */; };
+		1866E0B91F9B18A20061E036 /* Portal.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 1866E0B81F9B18A20061E036 /* Portal.scnassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		1866E0AD1F9B16F30061E036 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1866E0B01F9B16F30061E036 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1866E0B21F9B16F30061E036 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1866E0B81F9B18A20061E036 /* Portal.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = Portal.scnassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				1866E0AD1F9B16F30061E036 /* Assets.xcassets */,
 				1866E0AF1F9B16F30061E036 /* LaunchScreen.storyboard */,
 				1866E0B21F9B16F30061E036 /* Info.plist */,
+				1866E0B81F9B18A20061E036 /* Portal.scnassets */,
 			);
 			path = Gallery;
 			sourceTree = "<group>";
@@ -126,6 +129,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1866E0B91F9B18A20061E036 /* Portal.scnassets in Resources */,
 				1866E0A71F9B16F30061E036 /* art.scnassets in Resources */,
 				1866E0B11F9B16F30061E036 /* LaunchScreen.storyboard in Resources */,
 				1866E0AE1F9B16F30061E036 /* Assets.xcassets in Resources */,
