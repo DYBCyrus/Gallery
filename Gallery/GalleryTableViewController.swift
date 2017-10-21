@@ -11,8 +11,9 @@ import UIKit
 import Firebase
 import GoogleSignIn
 
-class GalleryTableViewController: UIViewController {
+class GalleryTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
+    @IBOutlet weak var tableView: UITableView!
     @IBAction func signoutTapped(_ sender: UIButton) {
         let firebaseAuth = Auth.auth()
         do {
@@ -25,7 +26,8 @@ class GalleryTableViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.tableView.dataSource = self
+        self.tableView.delegate = self
         // Do any additional setup after loading the view.
     }
 
@@ -44,7 +46,20 @@ class GalleryTableViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+    }*/
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? GalleryTableViewCell
+            else {
+                fatalError("The dequeued cell is not an instance of MealTableViewCell.")
+        }
+        return cell
     }
-    */
-
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    
 }

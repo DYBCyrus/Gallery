@@ -10,6 +10,8 @@ import UIKit
 import SceneKit
 import ARKit
 import FirebaseStorage
+import Firebase
+import GoogleSignIn
 
 class CreateGalleryViewController: UIViewController, ARSCNViewDelegate, UIImagePickerControllerDelegate,
 UINavigationControllerDelegate {
@@ -20,7 +22,7 @@ UINavigationControllerDelegate {
 	var allNodes: [SCNNode] = []
     var imageData: [Data] = []
     let storageRef = Storage.storage().reference()
-	
+    var ref: DatabaseReference!
     // Create a session configuration
     let configuration = ARWorldTrackingConfiguration()
     
@@ -45,6 +47,7 @@ UINavigationControllerDelegate {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
 		self.sceneView.addGestureRecognizer(tapGestureRecognizer)
         self.planeDetected.isHidden = true
+        ref = Database.database().reference()
         // Set the scene to the view
 		//sceneView.scene = scene
     }
@@ -144,23 +147,38 @@ UINavigationControllerDelegate {
 	}
     
     @IBAction func saveTapped(_ sender: UIButton) {
-        print("tapped")
-        print("length of imagedata is \(self.imageData.count)")
+//        print("tapped")
+//        print("length of imagedata is \(self.imageData.count)")
+        
+        
+        // ask the user to name the gallery
         let metadata = StorageMetadata()
         metadata.contentType = "image/jpeg"
         
-        for imgdata in self.imageData {
-            storageRef.child("image/\(String().randomString(length: 20))").putData(imgdata, metadata: metadata) { (metadata, error) in
-                guard let metadata = metadata else {
-                    // Uh-oh, an error occurred!
-                    print("uhoh an error occured")
-                    return
+        let gallery_id = String().randomString(length: 20)
+        if let user = Auth.auth().currentUser {
+            for imgdata in self.imageData {
+                let imageID = String().randomString(length: 20)
+                // save the image to firebase storage
+                storageRef.child("\(user.uid)/images/\(imageID)").putData(imgdata, metadata: metadata) { (metadata, error) in
+                    guard let metadata = metadata else {
+                        // Uh-oh, an error occurred!
+                        print("uhoh an error occured")
+                        return
+                    }
+                    // Metadata contains file metadata such as size, content-type, and download URL.
+                    print("URL is \(metadata.downloadURL()?.absoluteString ?? "")")
+                    print("content type is \(metadata.contentType)")
+                    let downloadURL = metadata.downloadURL()?.absoluteString ?? ""
+                    
+                    self.ref.child("galleries").child("\(gallery_id)").child("imageURLs").childByAutoId().setValue(downloadURL)
                 }
-                // Metadata contains file metadata such as size, content-type, and download URL.
-                let downloadURL = metadata.downloadURL
-                print(downloadURL)
+                
+                // save the generated random string into firebase database
+                
             }
-            
+            // save the gallery to user
+            ref.child("users").child(user.uid).child("galleries").childByAutoId().setValue(gallery_id)
         }
     }
     

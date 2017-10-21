@@ -129,18 +129,47 @@
                                 <rect key="frame" x="0.0" y="64" width="414" height="623"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="mGA-FP-FMC">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="120" id="mGA-FP-FMC" customClass="GalleryTableViewCell" customModule="Gallery" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="120"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mGA-FP-FMC" id="bY9-Wr-R3y">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="119.66666666666667"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Gallery 1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jE3-B1-Lwb">
+                                                    <rect key="frame" x="159" y="18" width="208" height="82"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="art1" translatesAutoresizingMaskIntoConstraints="NO" id="2Wu-ze-xkY">
+                                                    <rect key="frame" x="15" y="18" width="85" height="82"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="85" id="QLs-VC-z01"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="2Wu-ze-xkY" firstAttribute="top" secondItem="bY9-Wr-R3y" secondAttribute="topMargin" constant="-13" id="TIz-dd-ab2"/>
+                                                <constraint firstItem="jE3-B1-Lwb" firstAttribute="bottom" secondItem="2Wu-ze-xkY" secondAttribute="bottom" id="WGy-gK-IJS"/>
+                                                <constraint firstItem="2Wu-ze-xkY" firstAttribute="centerY" secondItem="bY9-Wr-R3y" secondAttribute="centerY" id="qxo-lg-F1d"/>
+                                                <constraint firstItem="2Wu-ze-xkY" firstAttribute="leading" secondItem="bY9-Wr-R3y" secondAttribute="leadingMargin" constant="-5" id="rdo-Da-BPj"/>
+                                                <constraint firstItem="jE3-B1-Lwb" firstAttribute="leading" secondItem="2Wu-ze-xkY" secondAttribute="trailing" constant="59" id="uTM-1g-Uaz"/>
+                                                <constraint firstItem="jE3-B1-Lwb" firstAttribute="top" secondItem="2Wu-ze-xkY" secondAttribute="top" id="wv4-Gb-V3p"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="jE3-B1-Lwb" secondAttribute="trailing" constant="27" id="zsK-5U-8ha"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="name" destination="jE3-B1-Lwb" id="VDs-7T-mQW"/>
+                                            <outlet property="photo" destination="2Wu-ze-xkY" id="KC6-tt-uqq"/>
                                             <segue destination="HC9-WK-hr4" kind="show" id="pzY-Uj-NSD"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="iwv-5j-YEB" id="vub-AC-bzR"/>
+                                    <outlet property="delegate" destination="iwv-5j-YEB" id="pyg-XM-kxT"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -170,10 +199,13 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="BgZ-Cj-0u1" id="Xn2-1Z-DSx"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yNX-Dr-7e3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1313" y="-451"/>
+            <point key="canvasLocation" x="1311.5942028985507" y="-451.63043478260875"/>
         </scene>
         <!--Create Gallery View Controller-->
         <scene sceneID="XX2-NH-S7e">
@@ -289,7 +321,10 @@
             <point key="canvasLocation" x="592.75362318840587" y="567.39130434782612"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="art1" width="280" height="280"/>
+    </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ByB-I4-qxW"/>
+        <segue reference="pzY-Uj-NSD"/>
     </inferredMetricsTieBreakers>
 </document>

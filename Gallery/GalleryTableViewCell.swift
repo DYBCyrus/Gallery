@@ -10,6 +10,8 @@ import UIKit
 
 class GalleryTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var photo: UIImageView!
+    @IBOutlet weak var name: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

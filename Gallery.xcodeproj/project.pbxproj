@@ -20,6 +20,7 @@
 		D8561D5B1F9B74F30082DF25 /* GalleryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D5A1F9B74F30082DF25 /* GalleryTableViewController.swift */; };
 		D8561D5D1F9B75C40082DF25 /* GalleryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D5C1F9B75C40082DF25 /* GalleryTableViewCell.swift */; };
 		D8561D5F1F9B82C00082DF25 /* ExploreGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D5E1F9B82C00082DF25 /* ExploreGalleryViewController.swift */; };
+		D8EF2E2C1F9BE07B003F1A96 /* 6901603studio.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D8EF2E2B1F9BE07B003F1A96 /* 6901603studio.jpeg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		D8561D5A1F9B74F30082DF25 /* GalleryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryTableViewController.swift; sourceTree = "<group>"; };
 		D8561D5C1F9B75C40082DF25 /* GalleryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryTableViewCell.swift; sourceTree = "<group>"; };
 		D8561D5E1F9B82C00082DF25 /* ExploreGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreGalleryViewController.swift; sourceTree = "<group>"; };
+		D8EF2E2B1F9BE07B003F1A96 /* 6901603studio.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 6901603studio.jpeg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,7 @@
 				1866E0A81F9B16F30061E036 /* CreateGalleryViewController.swift */,
 				1866E0AA1F9B16F30061E036 /* Main.storyboard */,
 				1866E0AD1F9B16F30061E036 /* Assets.xcassets */,
+				D8EF2E2B1F9BE07B003F1A96 /* 6901603studio.jpeg */,
 				1866E0AF1F9B16F30061E036 /* LaunchScreen.storyboard */,
 				1866E0B21F9B16F30061E036 /* Info.plist */,
 				D8561D561F9B6DCE0082DF25 /* GoogleService-Info.plist */,
@@ -177,6 +180,7 @@
 				D8561D571F9B6DCE0082DF25 /* GoogleService-Info.plist in Resources */,
 				1866E0AE1F9B16F30061E036 /* Assets.xcassets in Resources */,
 				1866E0AC1F9B16F30061E036 /* Main.storyboard in Resources */,
+				D8EF2E2C1F9BE07B003F1A96 /* 6901603studio.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
