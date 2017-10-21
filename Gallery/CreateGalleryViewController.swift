@@ -165,7 +165,7 @@ UINavigationControllerDelegate {
         
         let gallery_id = String().randomString(length: 20)
         if let user = Auth.auth().currentUser {
-            for imgdata in self.imageData {
+            for (index, imgdata) in self.imageData.enumerated() {
                 let imageID = String().randomString(length: 20)
                 // save the image to firebase storage
                 storageRef.child("\(user.uid)/images/\(imageID)").putData(imgdata, metadata: metadata) { (metadata, error) in
@@ -180,6 +180,7 @@ UINavigationControllerDelegate {
                     let downloadURL = metadata.downloadURL()?.absoluteString ?? ""
                     
                     self.ref.child("galleries").child("\(gallery_id)").child("imageURLs").childByAutoId().setValue(downloadURL)
+//                    self.ref.child("galleries").child("\(gallery_id)").child("nodeNames").childByAutoId().setValue()
                 }
                 
                 // save the generated random string into firebase database
