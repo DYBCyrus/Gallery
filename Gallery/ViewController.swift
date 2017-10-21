@@ -54,7 +54,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func addPortal(hitTestResult: ARHitTestResult) {
-        let portalScene = SCNScene(named: "Portal.scnassets/Portal.scn")
+        let portalScene = SCNScene(named: "Portal.scnassets/Portal/Portal.scn")
         let portalNode = portalScene!.rootNode.childNode(withName: "Portal", recursively: false)!
         let transform = hitTestResult.worldTransform
         let planeXposition = transform.columns.3.x
@@ -69,8 +69,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.addWall(nodeName: "SideRed", portalName: portalNode, imageName: "sideDoorB.png")
         self.addPlane(nodeName: "roof", portalName: portalNode, imageName: "top.png")
         self.addPlane(nodeName: "low", portalName: portalNode, imageName: "bottom.png")
+		self.addLamp(nodeName: "lamp", portalName: portalNode)
     }
-    
+	
+	func addLamp(nodeName: String, portalName: SCNNode) {
+		let child = portalName.childNode(withName: nodeName, recursively: true)
+		child?.renderingOrder = 200
+	}
+	
 	func addWall(nodeName: String, portalName: SCNNode, imageName: String) {
         let child = portalName.childNode(withName: nodeName, recursively: true)
         child?.renderingOrder = 200
