@@ -45,7 +45,7 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
                 self.signoutButton.isHidden = false
                 let id = user.uid
                 self.ref.child("users").child(id).setValue(["username":"\(user.displayName!)"])
-                self.ref.child("users").child(id).setValue(["email":"\(user.email!)"])
+                self.ref.child("users").child(id).updateChildValues(["email":"\(user.email!)"])
                 self.performSegue(withIdentifier: "fromSigninToTab", sender: self)
             } else {
                 self.welcomeLabel.text = "Please Sign In"
