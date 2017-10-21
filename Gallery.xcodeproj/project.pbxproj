@@ -19,6 +19,7 @@
 		D8561D5B1F9B74F30082DF25 /* GalleryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D5A1F9B74F30082DF25 /* GalleryTableViewController.swift */; };
 		D8561D5D1F9B75C40082DF25 /* GalleryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D5C1F9B75C40082DF25 /* GalleryTableViewCell.swift */; };
 		D8561D5F1F9B82C00082DF25 /* CreateARGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D5E1F9B82C00082DF25 /* CreateARGalleryViewController.swift */; };
+		1866E0B91F9B18A20061E036 /* Portal.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 1866E0B81F9B18A20061E036 /* Portal.scnassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		D8561D5A1F9B74F30082DF25 /* GalleryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryTableViewController.swift; sourceTree = "<group>"; };
 		D8561D5C1F9B75C40082DF25 /* GalleryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryTableViewCell.swift; sourceTree = "<group>"; };
 		D8561D5E1F9B82C00082DF25 /* CreateARGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateARGalleryViewController.swift; sourceTree = "<group>"; };
+		1866E0B81F9B18A20061E036 /* Portal.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = Portal.scnassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +87,7 @@
 				D8561D5A1F9B74F30082DF25 /* GalleryTableViewController.swift */,
 				D8561D5C1F9B75C40082DF25 /* GalleryTableViewCell.swift */,
 				D8561D5E1F9B82C00082DF25 /* CreateARGalleryViewController.swift */,
+				1866E0B81F9B18A20061E036 /* Portal.scnassets */,
 			);
 			path = Gallery;
 			sourceTree = "<group>";
@@ -168,6 +171,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1866E0B91F9B18A20061E036 /* Portal.scnassets in Resources */,
 				1866E0A71F9B16F30061E036 /* art.scnassets in Resources */,
 				1866E0B11F9B16F30061E036 /* LaunchScreen.storyboard in Resources */,
 				D8561D571F9B6DCE0082DF25 /* GoogleService-Info.plist in Resources */,
