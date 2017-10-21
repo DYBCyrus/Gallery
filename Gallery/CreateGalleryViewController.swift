@@ -136,7 +136,7 @@ UINavigationControllerDelegate {
 		let image = UIImagePickerController()
 		image.delegate = self
 		image.sourceType = UIImagePickerControllerSourceType.photoLibrary
-		image.allowsEditing = false
+		image.allowsEditing = true
 		self.present(image, animated: true)
 	}
 	
