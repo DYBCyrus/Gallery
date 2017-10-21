@@ -73,12 +73,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 	
 	func addLamp(nodeName: String, portalName: SCNNode) {
-		let child = portalName.childNode(withName: nodeName, recursively: true)
+		let child = portalName.childNode(withName: nodeName, recursively: false)
 		child?.renderingOrder = 200
 	}
 	
 	func addWall(nodeName: String, portalName: SCNNode, imageName: String) {
-        let child = portalName.childNode(withName: nodeName, recursively: true)
+        let child = portalName.childNode(withName: nodeName, recursively: false)
         child?.renderingOrder = 200
 		for nodes in (child?.childNodes)! {
 			nodes.renderingOrder = 200
@@ -95,7 +95,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
 	func addPlane(nodeName: String, portalName: SCNNode, imageName: String) {
-        let child = portalName.childNode(withName: nodeName, recursively: true)
+        let child = portalName.childNode(withName: nodeName, recursively: false)
         child?.renderingOrder = 200
 		child?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "Portal.scnassets/\(imageName).png")
     }
