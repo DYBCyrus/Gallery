@@ -30,15 +30,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
-        sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+        sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
         // Create a new scene
-        //        let scene = SCNScene()
+		//let scene = SCNScene()
         
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
-        self.sceneView.addGestureRecognizer(tapGestureRecognizer)
-        
+		self.sceneView.addGestureRecognizer(tapGestureRecognizer)
+
         // Set the scene to the view
-        //        sceneView.scene = scene
+		//sceneView.scene = scene
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer) {
@@ -46,7 +46,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         guard let sceneView = sender.view as? ARSCNView else {return}
         let touchLocation = sender.location(in: sceneView)
         let hitTestResult = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
-        if !hitTestResult.isEmpty {
+		print(hitTestResult.isEmpty)
+		if !hitTestResult.isEmpty {
             print("add")
             self.addPortal(hitTestResult: hitTestResult.first!)
         } else {
