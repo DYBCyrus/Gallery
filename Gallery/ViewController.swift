@@ -42,13 +42,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer) {
-        print("tapped")
         guard let sceneView = sender.view as? ARSCNView else {return}
         let touchLocation = sender.location(in: sceneView)
         let hitTestResult = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
 		print(hitTestResult.isEmpty)
 		if !hitTestResult.isEmpty {
-            print("add")
             self.addPortal(hitTestResult: hitTestResult.first!)
         } else {
             
@@ -64,27 +62,36 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let planeZposition = transform.columns.3.z
         portalNode.position = SCNVector3(planeXposition,planeYposition,planeZposition)
         self.sceneView.scene.rootNode.addChildNode(portalNode)
-        self.addWall(nodeName: "back", portalName: portalNode)
-        self.addWall(nodeName: "right", portalName: portalNode)
-        self.addWall(nodeName: "left", portalName: portalNode)
-        self.addWall(nodeName: "SideGreen", portalName: portalNode)
-        self.addWall(nodeName: "SideRed", portalName: portalNode)
-        self.addPlane(nodeName: "roof", portalName: portalNode)
-        self.addPlane(nodeName: "low", portalName: portalNode)
+        self.addWall(nodeName: "back", portalName: portalNode, imageName: "back.png")
+        self.addWall(nodeName: "right", portalName: portalNode, imageName: "sideB.png")
+        self.addWall(nodeName: "left", portalName: portalNode, imageName: "sideA.png")
+		self.addWall(nodeName: "SideGreen", portalName: portalNode, imageName: "sideDoorA.png")
+        self.addWall(nodeName: "SideRed", portalName: portalNode, imageName: "sideDoorB.png")
+        self.addPlane(nodeName: "roof", portalName: portalNode, imageName: "top.png")
+        self.addPlane(nodeName: "low", portalName: portalNode, imageName: "bottom.png")
     }
     
-    func addWall(nodeName: String, portalName: SCNNode) {
+	func addWall(nodeName: String, portalName: SCNNode, imageName: String) {
         let child = portalName.childNode(withName: nodeName, recursively: true)
         child?.renderingOrder = 200
+		for nodes in (child?.childNodes)! {
+			nodes.renderingOrder = 200
+		}
+		child?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "Portal.scnassets/\(imageName).png")
         if let mask = child?.childNode(withName: "mask", recursively: false) {
-            print("transparency!")
+			mask.renderingOrder = 0
             mask.geometry?.firstMaterial?.transparency = 0.000001
         }
+		if let window = child?.childNode(withName: "window", recursively: false) {
+			window.renderingOrder = 0
+			window.geometry?.firstMaterial?.transparency = 0.000001
+		}
     }
     
-    func addPlane(nodeName: String, portalName: SCNNode) {
+	func addPlane(nodeName: String, portalName: SCNNode, imageName: String) {
         let child = portalName.childNode(withName: nodeName, recursively: true)
         child?.renderingOrder = 200
+		child?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "Portal.scnassets/\(imageName).png")
     }
     
     override func viewWillAppear(_ animated: Bool) {
