@@ -148,6 +148,11 @@ UINavigationControllerDelegate {
 		self.dismiss(animated: true, completion: nil)
 		sceneView.session.run(configuration)
 	}
+	
+	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+		self.dismiss(animated: false, completion: nil)
+		sceneView.session.run(configuration)
+	}
     
     @IBAction func saveTapped(_ sender: UIButton) {
 //        print("tapped")
