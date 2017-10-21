@@ -22,6 +22,7 @@ UINavigationControllerDelegate {
 	
 	var allNodes: [SCNNode] = []
     var imageData: [Data] = []
+    var nodeNames: [String] = []
     let storageRef = Storage.storage().reference()
     var ref: DatabaseReference!
     // Create a session configuration
@@ -144,6 +145,7 @@ UINavigationControllerDelegate {
 			// set node image
 			targetNode?.geometry?.firstMaterial?.diffuse.contents = image
             imageData.append(UIImageJPEGRepresentation(image, 0.8)!)
+            nodeNames.append((targetNode?.name)!)
 		}
 		self.dismiss(animated: true, completion: nil)
 		sceneView.session.run(configuration)
@@ -165,6 +167,8 @@ UINavigationControllerDelegate {
         
         let gallery_id = String().randomString(length: 20)
         if let user = Auth.auth().currentUser {
+            
+            self.ref.child("galleries").child("\(gallery_id)").setValue(["user": user.uid])
             for (index, imgdata) in self.imageData.enumerated() {
                 let imageID = String().randomString(length: 20)
                 // save the image to firebase storage
@@ -180,7 +184,7 @@ UINavigationControllerDelegate {
                     let downloadURL = metadata.downloadURL()?.absoluteString ?? ""
                     
                     self.ref.child("galleries").child("\(gallery_id)").child("imageURLs").childByAutoId().setValue(downloadURL)
-//                    self.ref.child("galleries").child("\(gallery_id)").child("nodeNames").childByAutoId().setValue()
+                    self.ref.child("galleries").child("\(gallery_id)").child("nodeNames").childByAutoId().setValue(self.nodeNames[index])
                 }
                 
                 // save the generated random string into firebase database
