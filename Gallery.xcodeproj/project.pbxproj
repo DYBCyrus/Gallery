@@ -14,12 +14,12 @@
 		1866E0AC1F9B16F30061E036 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1866E0AA1F9B16F30061E036 /* Main.storyboard */; };
 		1866E0AE1F9B16F30061E036 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1866E0AD1F9B16F30061E036 /* Assets.xcassets */; };
 		1866E0B11F9B16F30061E036 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1866E0AF1F9B16F30061E036 /* LaunchScreen.storyboard */; };
+		1866E0B91F9B18A20061E036 /* Portal.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 1866E0B81F9B18A20061E036 /* Portal.scnassets */; };
 		D8561D571F9B6DCE0082DF25 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8561D561F9B6DCE0082DF25 /* GoogleService-Info.plist */; };
 		D8561D591F9B6F2A0082DF25 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D581F9B6F2A0082DF25 /* SignInViewController.swift */; };
 		D8561D5B1F9B74F30082DF25 /* GalleryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D5A1F9B74F30082DF25 /* GalleryTableViewController.swift */; };
 		D8561D5D1F9B75C40082DF25 /* GalleryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D5C1F9B75C40082DF25 /* GalleryTableViewCell.swift */; };
 		D8561D5F1F9B82C00082DF25 /* CreateARGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D5E1F9B82C00082DF25 /* CreateARGalleryViewController.swift */; };
-		1866E0B91F9B18A20061E036 /* Portal.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 1866E0B81F9B18A20061E036 /* Portal.scnassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +32,7 @@
 		1866E0AD1F9B16F30061E036 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1866E0B01F9B16F30061E036 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1866E0B21F9B16F30061E036 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1866E0B81F9B18A20061E036 /* Portal.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = Portal.scnassets; sourceTree = "<group>"; };
 		4B5D6E01B86CED8BF5CA389A /* Pods-Gallery.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gallery.release.xcconfig"; path = "Pods/Target Support Files/Pods-Gallery/Pods-Gallery.release.xcconfig"; sourceTree = "<group>"; };
 		AA94A4BAB36EC3DEFA09AFFA /* Pods_Gallery.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Gallery.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8561D561F9B6DCE0082DF25 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -39,7 +40,6 @@
 		D8561D5A1F9B74F30082DF25 /* GalleryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryTableViewController.swift; sourceTree = "<group>"; };
 		D8561D5C1F9B75C40082DF25 /* GalleryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryTableViewCell.swift; sourceTree = "<group>"; };
 		D8561D5E1F9B82C00082DF25 /* CreateARGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateARGalleryViewController.swift; sourceTree = "<group>"; };
-		1866E0B81F9B18A20061E036 /* Portal.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = Portal.scnassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
