@@ -23,13 +23,12 @@ UINavigationControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Run the view's session
-        sceneView.session.run(configuration)
-        
         // Set the view's delegate
         sceneView.delegate = self
         
         self.configuration.planeDetection = .horizontal
+		// Run the view's session
+		sceneView.session.run(configuration)
         
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
@@ -89,6 +88,9 @@ UINavigationControllerDelegate {
 	func addLamp(nodeName: String, portalName: SCNNode) {
 		let child = portalName.childNode(withName: nodeName, recursively: false)
 		child?.renderingOrder = 200
+		for nodes in (child?.childNodes)! {
+			nodes.renderingOrder = 200
+		}
 	}
 	
 	func addFrame(nodeName: String, portalName: SCNNode) {
