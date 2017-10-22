@@ -19,7 +19,7 @@
 		D8561D5B1F9B74F30082DF25 /* GalleryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D5A1F9B74F30082DF25 /* GalleryTableViewController.swift */; };
 		D8561D5D1F9B75C40082DF25 /* GalleryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D5C1F9B75C40082DF25 /* GalleryTableViewCell.swift */; };
 		D8561D5F1F9B82C00082DF25 /* ExploreGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8561D5E1F9B82C00082DF25 /* ExploreGalleryViewController.swift */; };
-		D8EF2E2C1F9BE07B003F1A96 /* 6901603studio.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = D8EF2E2B1F9BE07B003F1A96 /* 6901603studio.jpeg */; };
+		D8EF2E2C1F9BE07B003F1A96 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		EBF2A54B1F9C124400310674 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1866E0AA1F9B16F30061E036 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -180,7 +180,7 @@
 				1866E0B11F9B16F30061E036 /* LaunchScreen.storyboard in Resources */,
 				D8561D571F9B6DCE0082DF25 /* GoogleService-Info.plist in Resources */,
 				1866E0AE1F9B16F30061E036 /* Assets.xcassets in Resources */,
-				D8EF2E2C1F9BE07B003F1A96 /* 6901603studio.jpeg in Resources */,
+				D8EF2E2C1F9BE07B003F1A96 /* (null) in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

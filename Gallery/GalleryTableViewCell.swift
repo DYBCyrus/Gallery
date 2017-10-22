@@ -12,6 +12,7 @@ class GalleryTableViewCell: UITableViewCell {
 
     @IBOutlet weak var photo: UIImageView!
     @IBOutlet weak var name: UILabel!
+    var id: String!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -21,6 +22,10 @@ class GalleryTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func getInfo() -> [String]{
+        return [id, name.text!]
     }
 
 }

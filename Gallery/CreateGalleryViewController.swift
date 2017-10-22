@@ -23,8 +23,8 @@ UINavigationControllerDelegate {
     @IBOutlet var sceneView: ARSCNView!
     var locManager = CLLocationManager()
     var currentLocation: CLLocation!
-    
-	var allNodes: [SCNNode] = []
+    var portalCreated = false
+    var allNodes: [SCNNode] = []
     var imageData: [Data] = []
     var nodeNames: [String] = []
     let storageRef = Storage.storage().reference()
@@ -32,9 +32,10 @@ UINavigationControllerDelegate {
     // Create a session configuration
     let configuration = ARWorldTrackingConfiguration()
     var geoFire: GeoFire!
+    var existingGallery : [String] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         // Set the view's delegate
         sceneView.delegate = self
@@ -42,9 +43,7 @@ UINavigationControllerDelegate {
         self.configuration.planeDetection = .horizontal
 		// Run the view's session
 		sceneView.session.run(configuration)
-        
-        // Show statistics such as fps and timing information
-        sceneView.showsStatistics = true
+        sceneView.showsStatistics = false
         sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
         // Create a new scene
 		//let scene = SCNScene()
@@ -65,7 +64,10 @@ UINavigationControllerDelegate {
         let hitTestResult = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
 		print(hitTestResult.isEmpty)
 		if !hitTestResult.isEmpty {
-            self.addPortal(hitTestResult: hitTestResult.first!)
+            if !portalCreated {
+                self.addPortal(hitTestResult: hitTestResult.first!)
+                portalCreated = true
+            }
         }
 		let nodeResults = sceneView.hitTest(touchLocation, options: nil)
 		for result in nodeResults {
@@ -173,59 +175,85 @@ UINavigationControllerDelegate {
 		sceneView.session.run(configuration)
 	}
     
-    @IBAction func saveTapped(_ sender: UIButton) {
-//        print("tapped")
-//        print("length of imagedata is \(self.imageData.count)")
-        
-        if (CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
-            CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
-            currentLocation = locManager.location
+    var galleryName : String? {
+        didSet{
+            // ask the user to name the gallery
+            let metadata = StorageMetadata()
+            metadata.contentType = "image/jpeg"
             
-            print(currentLocation.coordinate.latitude)
-            print(currentLocation.coordinate.longitude)
-        }
-        // ask the user to name the gallery
-        let metadata = StorageMetadata()
-        metadata.contentType = "image/jpeg"
-        
-        let gallery_id = String().randomString(length: 20)
-        if let user = Auth.auth().currentUser {
-            
-            self.ref.child("galleries").child("\(gallery_id)").setValue(["user": user.uid])
-            for (index, imgdata) in self.imageData.enumerated() {
-                let imageID = String().randomString(length: 20)
-                // save the image to firebase storage
-                storageRef.child("\(user.uid)/images/\(imageID)").putData(imgdata, metadata: metadata) { (metadata, error) in
-                    guard let metadata = metadata else {
-                        // Uh-oh, an error occurred!
-                        print("uhoh an error occured")
-                        return
+            let gallery_id = String().randomString(length: 20)
+            if let user = Auth.auth().currentUser {
+                
+                self.ref.child("galleries").child("\(gallery_id)").setValue(["user": user.uid])
+                self.ref.child("galleries").child("\(gallery_id)").child("name").setValue(galleryName)
+                for (index, imgdata) in self.imageData.enumerated() {
+                    let imageID = String().randomString(length: 20)
+                    // save the image to firebase storage
+                    storageRef.child("\(user.uid)/images/\(imageID)").putData(imgdata, metadata: metadata) { (metadata, error) in
+                        guard let metadata = metadata else {
+                            // Uh-oh, an error occurred!
+                            print("uhoh an error occured")
+                            return
+                        }
+                        // Metadata contains file metadata such as size, content-type, and download URL.
+                        print("URL is \(metadata.downloadURL()?.absoluteString ?? "")")
+                        print("content type is \(metadata.contentType)")
+                        let downloadURL = metadata.downloadURL()?.absoluteString ?? ""
+                        
+                        self.ref.child("galleries").child("\(gallery_id)").child("imageURLs").childByAutoId().setValue([downloadURL,self.nodeNames[index]])
                     }
-                    // Metadata contains file metadata such as size, content-type, and download URL.
-                    print("URL is \(metadata.downloadURL()?.absoluteString ?? "")")
-                    print("content type is \(metadata.contentType)")
-                    let downloadURL = metadata.downloadURL()?.absoluteString ?? ""
                     
-                    self.ref.child("galleries").child("\(gallery_id)").child("imageURLs").childByAutoId().setValue(downloadURL)
-                    self.ref.child("galleries").child("\(gallery_id)").child("nodeNames").childByAutoId().setValue(self.nodeNames[index])
+                    // save the generated random string into firebase database
+                    
                 }
+                // save the gallery to user
+                ref.child("users").child(user.uid).child("galleries").childByAutoId().setValue(gallery_id)
                 
-                // save the generated random string into firebase database
-                
-            }
-            // save the gallery to user
-            ref.child("users").child(user.uid).child("galleries").childByAutoId().setValue(gallery_id)
-            
-            // save the geo location to the gallery
-            geoFire.setLocation(currentLocation, forKey: "\(gallery_id)") { (error) in
-                if (error != nil) {
-                    print("An error occured: \(error)")
-                } else {
-                    print("Saved location successfully!")
+                // save the geo location to the gallery
+                geoFire.setLocation(currentLocation, forKey: "\(gallery_id)") { (error) in
+                    if (error != nil) {
+                        print("An error occured: \(error)")
+                    } else {
+                        print("Saved location successfully!")
+                    }
                 }
+                portalCreated = false
+                self.navigationController?.popViewController(animated: true)
             }
         }
     }
+    
+    @IBAction func saveTapped(_ sender: UIButton) {
+//        print("tapped")
+//        print("length of imagedata is \(self.imageData.count)")
+        if portalCreated {
+            if (CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
+                CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
+                currentLocation = locManager.location
+                
+                print(currentLocation.coordinate.latitude)
+                print(currentLocation.coordinate.longitude)
+            }
+
+            let alert = UIAlertController(title: "What's your new gallery called?", message: "", preferredStyle: .alert)
+            
+            //2. Add the text field. You can configure it however you need.
+            alert.addTextField { (textField) in
+                textField.text = ""
+            }
+            
+            // 3. Grab the value from the text field, and print it when the user clicks OK.
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+                let textField = alert!.textFields![0] // Force unwrapping because we know it exists.
+                self.galleryName = textField.text!
+            }))
+            
+            // 4. Present the alert.
+            self.present(alert, animated: true, completion: nil)
+
+        }
+    }
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -257,8 +285,7 @@ UINavigationControllerDelegate {
      let node = SCNNode()
      
      return node
-     }
-     */
+     }     */
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard anchor is ARPlaneAnchor else {return}
