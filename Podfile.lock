@@ -32,6 +32,8 @@ PODS:
     - FirebaseAnalytics (~> 4.0)
     - FirebaseCore (~> 4.0)
     - GTMSessionFetcher/Core (~> 1.1)
+  - GeoFire (2.0.0):
+    - Firebase/Database (~> 4.0)
   - GoogleSignIn (4.1.0):
     - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
     - GoogleToolboxForMac/NSString+URLArguments (~> 2.1)
@@ -66,7 +68,17 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - Firebase/Storage
+  - GeoFire (from `https://github.com/firebase/geofire-objc.git`)
   - GoogleSignIn
+
+EXTERNAL SOURCES:
+  GeoFire:
+    :git: https://github.com/firebase/geofire-objc.git
+
+CHECKOUT OPTIONS:
+  GeoFire:
+    :commit: 96d6463f59016785f9c5ae9b669019c44786a23f
+    :git: https://github.com/firebase/geofire-objc.git
 
 SPEC CHECKSUMS:
   Firebase: 83283761a1ef6dc9846e03d08059f51421afbd65
@@ -76,6 +88,7 @@ SPEC CHECKSUMS:
   FirebaseDatabase: 607284a103e961d7f5863ee603cab5e85f443bd6
   FirebaseInstanceID: 70c2b877e9338971b2429ea5a4293df6961aa44e
   FirebaseStorage: 0cca42d9b889a0227c3a50121f45a4469fc9eb27
+  GeoFire: 02f02683e09367c2eee073c6b09c794da19833ee
   GoogleSignIn: 8c599fc10d25b2af86a3f82fd9631e863f2b1400
   GoogleToolboxForMac: 2501e2ad72a52eb3dfe7bd9aee7dad11b858bd20
   GTMOAuth2: be83fd28d63ae3087e7d351b1f39c1a7e24ab6e7
@@ -83,6 +96,6 @@ SPEC CHECKSUMS:
   leveldb-library: 10fb39c39e243db4af1828441162405bbcec1404
   nanopb: 5601e6bca2dbf1ed831b519092ec110f66982ca3
 
-PODFILE CHECKSUM: ec3a07f5d8aa9f130d5ce97092370fccdf21f724
+PODFILE CHECKSUM: 839c68bfca61ee84d5ec458514875add036adada
 
 COCOAPODS: 1.1.1

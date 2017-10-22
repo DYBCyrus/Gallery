@@ -27,26 +27,24 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
         }
     }
     @IBAction func signinTouched(_ sender: GIDSignInButton) {
-        
-        GIDSignIn.sharedInstance().signInSilently()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         GIDSignIn.sharedInstance().uiDelegate = self
-        // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        ref = Database.database().reference()
+        ref = Database.database().reference()
         Auth.auth().addStateDidChangeListener{ (auth, user) in
             if let user = user {
                 self.welcomeLabel.text = "Welcome,\(user.displayName!)"
                 self.signoutButton.isHidden = false
-//                let id = user.uid
-//                self.ref.child("users").child(id).updateChildValues(["username":"\(user.displayName!)"])
-//                self.ref.child("users").child(id).updateChildValues(["email":"\(user.email!)"])
+                let id = user.uid
+                self.ref.child("users").child(id).updateChildValues(["username":"\(user.displayName!)"])
+                self.ref.child("users").child(id).updateChildValues(["email":"\(user.email!)"])
                 self.performSegue(withIdentifier: "fromSigninToTab", sender: self)
+                
             } else {
                 self.welcomeLabel.text = "Please Sign In"
                 self.signoutButton.isHidden = true
