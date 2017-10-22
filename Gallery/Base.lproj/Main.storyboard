@@ -44,6 +44,9 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="La" translatesAutoresizingMaskIntoConstraints="NO" id="mt6-Zq-866">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="238"/>
                                 <color key="backgroundColor" red="0.7019608021" green="0.7019608021" blue="0.7019608021" alpha="0.0" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="238" id="b8o-2o-I7W"/>
+                                </constraints>
                             </imageView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" image="unnamed-2" translatesAutoresizingMaskIntoConstraints="NO" id="626-6M-tX1">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>

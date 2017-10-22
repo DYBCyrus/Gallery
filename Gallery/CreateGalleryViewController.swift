@@ -13,13 +13,17 @@ import FirebaseStorage
 import FirebaseDatabase
 import Firebase
 import GoogleSignIn
+import GeoFire
+import MapKit
+
 
 class CreateGalleryViewController: UIViewController, ARSCNViewDelegate, UIImagePickerControllerDelegate,
 UINavigationControllerDelegate {
-
     @IBOutlet weak var planeDetected: UIVisualEffectView!
     @IBOutlet var sceneView: ARSCNView!
-	
+    var locManager = CLLocationManager()
+    var currentLocation: CLLocation!
+    
 	var allNodes: [SCNNode] = []
     var imageData: [Data] = []
     var nodeNames: [String] = []
@@ -27,10 +31,10 @@ UINavigationControllerDelegate {
     var ref: DatabaseReference!
     // Create a session configuration
     let configuration = ARWorldTrackingConfiguration()
-    
-    
+    var geoFire: GeoFire!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         // Set the view's delegate
         sceneView.delegate = self
@@ -49,6 +53,8 @@ UINavigationControllerDelegate {
 		self.sceneView.addGestureRecognizer(tapGestureRecognizer)
         self.planeDetected.isHidden = true
         ref = Database.database().reference()
+        geoFire = GeoFire(firebaseRef: ref)
+        locManager.requestWhenInUseAuthorization()
         // Set the scene to the view
 		//sceneView.scene = scene
     }
@@ -82,16 +88,16 @@ UINavigationControllerDelegate {
         let planeZposition = transform.columns.3.z
         portalNode.position = SCNVector3(planeXposition,planeYposition,planeZposition)
         self.sceneView.scene.rootNode.addChildNode(portalNode)
-        self.addWall(nodeName: "back", portalName: portalNode, imageName: "back.png")
-        self.addWall(nodeName: "right", portalName: portalNode, imageName: "sideB.png")
-        self.addWall(nodeName: "left", portalName: portalNode, imageName: "sideA.png")
-		self.addWall(nodeName: "SideGreen", portalName: portalNode, imageName: "sideDoorA.png")
-        self.addWall(nodeName: "SideRed", portalName: portalNode, imageName: "sideDoorB.png")
+        self.addWall(nodeName: "back", portalName: portalNode, imageName: "wall.png")
+        self.addWall(nodeName: "right", portalName: portalNode, imageName: "wall.png")
+        self.addWall(nodeName: "left", portalName: portalNode, imageName: "wall.png")
+		self.addWall(nodeName: "SideGreen", portalName: portalNode, imageName: "wall.png")
+        self.addWall(nodeName: "SideRed", portalName: portalNode, imageName: "wall.png")
 		self.addFrame(nodeName: "backFrames", portalName: portalNode)
 		self.addFrame(nodeName: "leftFrames", portalName: portalNode)
 		self.addFrame(nodeName: "rightFrames", portalName: portalNode)
-        self.addPlane(nodeName: "roof", portalName: portalNode, imageName: "top.png")
-        self.addPlane(nodeName: "low", portalName: portalNode, imageName: "bottom.png")
+        self.addPlane(nodeName: "roof", portalName: portalNode, imageName: "ceiling.png")
+        self.addPlane(nodeName: "low", portalName: portalNode, imageName: "floor.png")
 		self.addLamp(nodeName: "lamp", portalName: portalNode)
     }
 	
@@ -171,7 +177,13 @@ UINavigationControllerDelegate {
 //        print("tapped")
 //        print("length of imagedata is \(self.imageData.count)")
         
-        
+        if (CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
+            CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
+            currentLocation = locManager.location
+            
+            print(currentLocation.coordinate.latitude)
+            print(currentLocation.coordinate.longitude)
+        }
         // ask the user to name the gallery
         let metadata = StorageMetadata()
         metadata.contentType = "image/jpeg"
@@ -203,6 +215,15 @@ UINavigationControllerDelegate {
             }
             // save the gallery to user
             ref.child("users").child(user.uid).child("galleries").childByAutoId().setValue(gallery_id)
+            
+            // save the geo location to the gallery
+            geoFire.setLocation(currentLocation, forKey: "\(gallery_id)") { (error) in
+                if (error != nil) {
+                    print("An error occured: \(error)")
+                } else {
+                    print("Saved location successfully!")
+                }
+            }
         }
     }
     
@@ -263,6 +284,23 @@ UINavigationControllerDelegate {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
     }
+//    @IBAction func dummyTest(_ sender: UIButton) {
+//        if (CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
+//        CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedAlways){
+//            currentLocation = locManager.location
+//            let center = currentLocation
+//            // Query locations at [37.7832889, -122.4056973] with a radius of 600 meters
+//            var circleQuery = geoFire.query(at: center, withRadius: 0.6)
+//            circleQuery?.observe(.keyEntered, with: { (key: String!, location: CLLocation!) in
+//                print("Key '\(key!)' entered the search area and is at location '\(location.coordinate.longitude)' and '\(location.coordinate.latitude)'")
+//            })
+//        }
+//
+//        //        // Query location by region
+//        //        let span = MKCoordinateSpanMake(0.001, 0.001)
+//        //        let region = MKCoordinateRegionMake(center.coordinate, span)
+//        //        var regionQuery = geoFire.queryWithRegion(region)
+//    }
 }
 
 extension String {

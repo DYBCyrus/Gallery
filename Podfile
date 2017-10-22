@@ -11,4 +11,5 @@ target 'Gallery' do
   pod 'GoogleSignIn'
   pod 'Firebase/Database'
   pod 'Firebase/Storage'
+  pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc.git'
 end
