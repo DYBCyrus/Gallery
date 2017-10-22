@@ -11,6 +11,7 @@
 		03E6324E40F8F4A342D650E98C2130CD /* dumpfile.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A142A0022178B3EA4723F06AD7C1339 /* dumpfile.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		03F7BF5CC037C6BB6BD51806C13E2628 /* options.h in Headers */ = {isa = PBXBuildFile; fileRef = 2CEB4AB45EFF9300B7675C9E6B584765 /* options.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		056B62606111DFA3E62E2EEE90DEAEFB /* bloom.cc in Sources */ = {isa = PBXBuildFile; fileRef = 823875ACE4BA1D418ED8D79CA70D10B3 /* bloom.cc */; settings = {COMPILER_FLAGS = "-DOS_MACOSX -DLEVELDB_PLATFORM_POSIX -fno-objc-arc"; }; };
+		078A98C91F9C44240036633B /* FirebaseDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69CEEDBFD5A630645DEE67265C6547F5 /* FirebaseDatabase.framework */; };
 		0A05EF6A1D8A7BF0FF3BF26D1FE070EB /* arena.cc in Sources */ = {isa = PBXBuildFile; fileRef = CB9DC4C436D3C1C2BA77201E84B51D00 /* arena.cc */; settings = {COMPILER_FLAGS = "-DOS_MACOSX -DLEVELDB_PLATFORM_POSIX -fno-objc-arc"; }; };
 		0CD78A21F322DCA2C7C984EA10751B29 /* GeoFire.m in Sources */ = {isa = PBXBuildFile; fileRef = F0DFFBD09ABAD7E4B27EBE0FE1DF4429 /* GeoFire.m */; };
 		0D78DA876625EFC46569F2AC26F2753B /* filter_policy.h in Headers */ = {isa = PBXBuildFile; fileRef = DBBC4B5DAA5D973F10A991013AAFA13B /* filter_policy.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -20,7 +21,6 @@
 		1351C79BE5DA3A3D43D42036A647C262 /* GTMOAuth2SignIn.m in Sources */ = {isa = PBXBuildFile; fileRef = 084F3C4057A11D70A7FA8555A4839E4D /* GTMOAuth2SignIn.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		155028EA00429FF545ED5D87C1C25C23 /* pb_encode.c in Sources */ = {isa = PBXBuildFile; fileRef = DF9EFFD7CF55656AE03BCC8565781654 /* pb_encode.c */; settings = {COMPILER_FLAGS = "-fno-objc-arc -fno-objc-arc"; }; };
 		1615F55BD809EFFC2BF7521DBC123276 /* histogram.cc in Sources */ = {isa = PBXBuildFile; fileRef = BF4B46FDCA0E7066B8645E14277577F9 /* histogram.cc */; settings = {COMPILER_FLAGS = "-DOS_MACOSX -DLEVELDB_PLATFORM_POSIX -fno-objc-arc"; }; };
-		18661F701F9C12C8009BFB84 /* FirebaseDatabase.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 69CEEDBFD5A630645DEE67265C6547F5 /* FirebaseDatabase.framework */; };
 		18BAF6B392317A35D60E65A52DBD1E6D /* testutil.cc in Sources */ = {isa = PBXBuildFile; fileRef = E5417F15D69B7A4F827618A111D5C055 /* testutil.cc */; settings = {COMPILER_FLAGS = "-DOS_MACOSX -DLEVELDB_PLATFORM_POSIX -fno-objc-arc"; }; };
 		1CAD2D19B6043B494770E9DC585D276D /* GTMMIMEDocument.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C3A92DDBA60BD3BDCB009552A8B3333 /* GTMMIMEDocument.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1F716189FC5C7805EB9691299EF50ADD /* pb_decode.h in Headers */ = {isa = PBXBuildFile; fileRef = 323694FA269FAD07EFE5537FDDC61D7F /* pb_decode.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -409,7 +409,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18661F701F9C12C8009BFB84 /* FirebaseDatabase.framework in Frameworks */,
+				078A98C91F9C44240036633B /* FirebaseDatabase.framework in Frameworks */,
 				11FC26A5705596981D8030909459A9F3 /* CoreLocation.framework in Frameworks */,
 				2903453AC7FC702CDD3A627CE6480EA4 /* Foundation.framework in Frameworks */,
 				36897F1A564529FA0F6EDC6E56978E5A /* GoogleToolboxForMac.framework in Frameworks */,
