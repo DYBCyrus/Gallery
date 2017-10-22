@@ -88,16 +88,16 @@ UINavigationControllerDelegate {
         let planeZposition = transform.columns.3.z
         portalNode.position = SCNVector3(planeXposition,planeYposition,planeZposition)
         self.sceneView.scene.rootNode.addChildNode(portalNode)
-        self.addWall(nodeName: "back", portalName: portalNode, imageName: "back.png")
-        self.addWall(nodeName: "right", portalName: portalNode, imageName: "sideB.png")
-        self.addWall(nodeName: "left", portalName: portalNode, imageName: "sideA.png")
-		self.addWall(nodeName: "SideGreen", portalName: portalNode, imageName: "sideDoorA.png")
-        self.addWall(nodeName: "SideRed", portalName: portalNode, imageName: "sideDoorB.png")
+        self.addWall(nodeName: "back", portalName: portalNode, imageName: "wall.png")
+        self.addWall(nodeName: "right", portalName: portalNode, imageName: "wall.png")
+        self.addWall(nodeName: "left", portalName: portalNode, imageName: "wall.png")
+		self.addWall(nodeName: "SideGreen", portalName: portalNode, imageName: "wall.png")
+        self.addWall(nodeName: "SideRed", portalName: portalNode, imageName: "wall.png")
 		self.addFrame(nodeName: "backFrames", portalName: portalNode)
 		self.addFrame(nodeName: "leftFrames", portalName: portalNode)
 		self.addFrame(nodeName: "rightFrames", portalName: portalNode)
-        self.addPlane(nodeName: "roof", portalName: portalNode, imageName: "top.png")
-        self.addPlane(nodeName: "low", portalName: portalNode, imageName: "bottom.png")
+        self.addPlane(nodeName: "roof", portalName: portalNode, imageName: "ceiling.png")
+        self.addPlane(nodeName: "low", portalName: portalNode, imageName: "floor.png")
 		self.addLamp(nodeName: "lamp", portalName: portalNode)
     }
 	
