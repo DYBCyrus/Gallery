@@ -22,6 +22,7 @@ UINavigationControllerDelegate {
 	
 	var allNodes: [SCNNode] = []
     var imageData: [Data] = []
+    var nodeNames: [String] = []
     let storageRef = Storage.storage().reference()
     var ref: DatabaseReference!
     // Create a session configuration
@@ -65,7 +66,7 @@ UINavigationControllerDelegate {
 			if allNodes.contains(result.node) {
 				targetNode = result.node
 				sceneView.session.pause()
-				pickImage()
+				chooseImageSource()
 			}
 		}
     }
@@ -131,12 +132,23 @@ UINavigationControllerDelegate {
 		child?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "Portal.scnassets/\(imageName).png")
     }
 	
-	func pickImage() {
+	func chooseImageSource() {
 		let image = UIImagePickerController()
 		image.delegate = self
-		image.sourceType = UIImagePickerControllerSourceType.photoLibrary
-		image.allowsEditing = false
-		self.present(image, animated: true)
+		let actionSheet = UIAlertController(title: "Photo Source", message: "Please select a source", preferredStyle: .actionSheet)
+		actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: {(action: UIAlertAction) in
+			image.sourceType = .photoLibrary
+			image.allowsEditing = true
+			self.present(image, animated: true, completion: nil)
+		}))
+		actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: {(action: UIAlertAction) in
+			image.sourceType = .camera
+			image.allowsEditing = true
+			self.present(image, animated: true, completion: nil)
+		}))
+		actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+		self.present(actionSheet, animated: true, completion: nil)
+		sceneView.session.run(configuration)
 	}
 	
 	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -144,7 +156,13 @@ UINavigationControllerDelegate {
 			// set node image
 			targetNode?.geometry?.firstMaterial?.diffuse.contents = image
             imageData.append(UIImageJPEGRepresentation(image, 0.8)!)
+            nodeNames.append((targetNode?.name)!)
 		}
+		self.dismiss(animated: true, completion: nil)
+		sceneView.session.run(configuration)
+	}
+	
+	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
 		self.dismiss(animated: true, completion: nil)
 		sceneView.session.run(configuration)
 	}
@@ -160,7 +178,9 @@ UINavigationControllerDelegate {
         
         let gallery_id = String().randomString(length: 20)
         if let user = Auth.auth().currentUser {
-            for imgdata in self.imageData {
+            
+            self.ref.child("galleries").child("\(gallery_id)").setValue(["user": user.uid])
+            for (index, imgdata) in self.imageData.enumerated() {
                 let imageID = String().randomString(length: 20)
                 // save the image to firebase storage
                 storageRef.child("\(user.uid)/images/\(imageID)").putData(imgdata, metadata: metadata) { (metadata, error) in
@@ -175,6 +195,7 @@ UINavigationControllerDelegate {
                     let downloadURL = metadata.downloadURL()?.absoluteString ?? ""
                     
                     self.ref.child("galleries").child("\(gallery_id)").child("imageURLs").childByAutoId().setValue(downloadURL)
+                    self.ref.child("galleries").child("\(gallery_id)").child("nodeNames").childByAutoId().setValue(self.nodeNames[index])
                 }
                 
                 // save the generated random string into firebase database
