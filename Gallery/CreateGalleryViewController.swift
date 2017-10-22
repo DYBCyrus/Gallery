@@ -33,7 +33,7 @@ UINavigationControllerDelegate {
     let configuration = ARWorldTrackingConfiguration()
     var geoFire: GeoFire!
     var existingGallery : [String] = []
-
+    var imagePositions : [[UIImage:String]] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -56,6 +56,24 @@ UINavigationControllerDelegate {
         locManager.requestWhenInUseAuthorization()
         // Set the scene to the view
 		//sceneView.scene = scene
+        
+        
+        
+        if existingGallery != [] {
+            let galID = existingGallery[0]
+            if let userID = Auth.auth().currentUser?.uid {
+                
+                ref.child("galleries").child(galID).child("imageURLs").observe(.childAdded, with: {(snapshot) in
+                    if let result = snapshot.value as? [String] {
+                        let url = URL(string:result[0])
+                        let data = try? Data(contentsOf: url!)
+                        let image: UIImage = UIImage(data: data!)!
+                        self.imagePositions.append([image:result[1]])
+                    }
+                })
+            }
+            
+        }
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer) {
@@ -102,7 +120,11 @@ UINavigationControllerDelegate {
         self.addPlane(nodeName: "low", portalName: portalNode, imageName: "floor.png")
 		self.addLamp(nodeName: "lamp", portalName: portalNode)
     }
-	
+    func addimages(image: UIImage, nodeName: String, portalName: SCNNode) {
+        let child = portalName.childNode(withName: nodeName, recursively: false)
+        child?.geometry?.firstMaterial?.diffuse.contents = image
+
+    }
 	func addLamp(nodeName: String, portalName: SCNNode) {
 		let child = portalName.childNode(withName: nodeName, recursively: false)
 		child?.renderingOrder = 200
