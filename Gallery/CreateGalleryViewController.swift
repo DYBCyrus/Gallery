@@ -66,11 +66,12 @@ UINavigationControllerDelegate {
             if let userID = Auth.auth().currentUser?.uid {
                 
                 ref.child("galleries").child(galID).child("imageURLs").observe(.childAdded, with: {(snapshot) in
-                    if let result = snapshot.value as? [String] {
-                        let url = URL(string:result[0])
+                    if let nodeName = snapshot.key as? String {
+                        let actualURL = snapshot.value as? String
+                        let url = URL(string:actualURL!)
                         let data = try? Data(contentsOf: url!)
                         let image: UIImage = UIImage(data: data!)!
-                        self.imagePositions.append((image,result[1]))
+                        self.imagePositions.append((image,nodeName))
                     }
                 })
             }
@@ -276,7 +277,7 @@ UINavigationControllerDelegate {
                         print("content type is \(metadata.contentType)")
                         let downloadURL = metadata.downloadURL()?.absoluteString ?? ""
                         
-                        self.ref.child("galleries").child("\(gallery_id)").child("imageURLs").childByAutoId().setValue([downloadURL,self.nodeNames[index]])
+                        self.ref.child("galleries").child("\(gallery_id)").child("imageURLs").child(self.nodeNames[index]).setValue(downloadURL)
                     }
                     
                     // save the generated random string into firebase database
@@ -310,23 +311,55 @@ UINavigationControllerDelegate {
                 print(currentLocation.coordinate.latitude)
                 print(currentLocation.coordinate.longitude)
             }
-
-            let alert = UIAlertController(title: "What's your new gallery called?", message: "", preferredStyle: .alert)
+            if existingGallery.isEmpty {
+                let alert = UIAlertController(title: "What's your new gallery called?", message: "", preferredStyle: .alert)
             
-            //2. Add the text field. You can configure it however you need.
-            alert.addTextField { (textField) in
-                textField.text = ""
+                //2. Add the text field. You can configure it however you need.
+                alert.addTextField { (textField) in
+                    textField.text = ""
+                }
+            
+                // 3. Grab the value from the text field, and print it when the user clicks OK.
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+                    let textField = alert!.textFields![0] // Force unwrapping because we know it exists.
+                    self.galleryName = textField.text!
+                }))
+            
+                // 4. Present the alert.
+                self.present(alert, animated: true, completion: nil)
             }
-            
-            // 3. Grab the value from the text field, and print it when the user clicks OK.
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
-                let textField = alert!.textFields![0] // Force unwrapping because we know it exists.
-                self.galleryName = textField.text!
-            }))
-            
-            // 4. Present the alert.
-            self.present(alert, animated: true, completion: nil)
+            else {
+                let metadata = StorageMetadata()
+                metadata.contentType = "image/jpeg"
 
+                if let user = Auth.auth().currentUser {
+                    for (index, imgdata) in self.imageData.enumerated() {
+                        let imageID = String().randomString(length: 20)
+                        // save the image to firebase storage
+                        storageRef.child("\(user.uid)/images/\(imageID)").putData(imgdata, metadata: metadata) { (metadata, error) in
+                            guard let metadata = metadata else {
+                                // Uh-oh, an error occurred!
+                                print("uhoh an error occured")
+                                return
+                            }
+                            // Metadata contains file metadata such as size, content-type, and download URL.
+                            print("URL is \(metadata.downloadURL()?.absoluteString ?? "")")
+                            print("content type is \(metadata.contentType)")
+                            let downloadURL = metadata.downloadURL()?.absoluteString ?? ""
+                            
+                            self.ref.child("galleries").child("\(self.existingGallery[0])").child("imageURLs").child(self.nodeNames[index]).setValue(downloadURL)
+                        }
+                        
+                        // save the generated random string into firebase database
+                        
+                    }
+
+                    // save the geo location to the gallery
+
+                    portalCreated = false
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
         }
     }
 
