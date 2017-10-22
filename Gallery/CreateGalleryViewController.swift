@@ -157,7 +157,6 @@ UINavigationControllerDelegate {
         child?.geometry?.firstMaterial?.diffuse.contents = image
 
     }
-	func addLamp(nodeName: String, portalName: SCNNode) {
 
 	
 	func addModel(nodeName: String, portalName: SCNNode) {
