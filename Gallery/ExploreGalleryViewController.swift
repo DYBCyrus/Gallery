@@ -8,34 +8,122 @@
 
 import UIKit
 import ARKit
+import FirebaseStorage
+import FirebaseDatabase
+import Firebase
 class ExploreGalleryViewController: UIViewController, ARSCNViewDelegate {
 
+    @IBOutlet weak var planeDetected: UIVisualEffectView!
     @IBOutlet var sceneView: ARSCNView!
+    var galleryKey: String!
+    let configuration = ARWorldTrackingConfiguration()
     
+    var ref: DatabaseReference!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Set the view's delegate
         sceneView.delegate = self
         
+        self.configuration.planeDetection = .horizontal
         // Show statistics such as fps and timing information
-        sceneView.showsStatistics = false
+        
+        sceneView.session.run(configuration)
+        sceneView.showsStatistics = true
         sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
         // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
-        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        self.sceneView.addGestureRecognizer(tapGestureRecognizer)
         // Set the scene to the view
-        sceneView.scene = scene
+        ref = Database.database().reference()
+        self.planeDetected.isHidden = true
+    }
+    
+    @objc func handleTap(sender: UITapGestureRecognizer) {
+        guard let sceneView = sender.view as? ARSCNView else {return}
+        let touchLocation = sender.location(in: sceneView)
+        let hitTestResult = sceneView.hitTest(touchLocation, types: .existingPlaneUsingExtent)
+        print(hitTestResult.isEmpty)
+        if !hitTestResult.isEmpty {
+            self.addPortal(hitTestResult: hitTestResult.first!)
+        }
+    }
+    
+    var targetNode: SCNNode?
+    
+    func addPortal(hitTestResult: ARHitTestResult) {
+        let portalScene = SCNScene(named: "Portal.scnassets/Portal/Portal.scn")
+        let portalNode = portalScene!.rootNode.childNode(withName: "Portal", recursively: false)!
+        let transform = hitTestResult.worldTransform
+        let planeXposition = transform.columns.3.x
+        let planeYposition = transform.columns.3.y
+        let planeZposition = transform.columns.3.z
+        portalNode.position = SCNVector3(planeXposition,planeYposition,planeZposition)
+        self.sceneView.scene.rootNode.addChildNode(portalNode)
+        self.addWall(nodeName: "back", portalName: portalNode, imageName: "wall.png")
+        self.addWall(nodeName: "right", portalName: portalNode, imageName: "wall.png")
+        self.addWall(nodeName: "left", portalName: portalNode, imageName: "wall.png")
+        self.addWall(nodeName: "SideGreen", portalName: portalNode, imageName: "wall.png")
+        self.addWall(nodeName: "SideRed", portalName: portalNode, imageName: "wall.png")
+        self.addFrame(nodeName: "backFrames", portalName: portalNode)
+        self.addFrame(nodeName: "leftFrames", portalName: portalNode)
+        self.addFrame(nodeName: "rightFrames", portalName: portalNode)
+        self.addPlane(nodeName: "roof", portalName: portalNode, imageName: "ceiling.png")
+        self.addPlane(nodeName: "low", portalName: portalNode, imageName: "floor.png")
+        self.addLamp(nodeName: "lamp", portalName: portalNode)
+    }
+    
+    func addLamp(nodeName: String, portalName: SCNNode) {
+        let child = portalName.childNode(withName: nodeName, recursively: false)
+        child?.renderingOrder = 200
+        for nodes in (child?.childNodes)! {
+            nodes.renderingOrder = 200
+        }
+    }
+    
+    func addFrame(nodeName: String, portalName: SCNNode) {
+        let child = portalName.childNode(withName: nodeName, recursively: false)
+        child?.renderingOrder = 200
+        for nodes in (child?.childNodes)! {
+            nodes.renderingOrder = 200
+        }
+    }
+    
+    func addWall(nodeName: String, portalName: SCNNode, imageName: String) {
+        let child = portalName.childNode(withName: nodeName, recursively: false)
+        child?.renderingOrder = 200
+        child?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "Portal.scnassets/\(imageName).png")
+        if let mask = child?.childNode(withName: "mask", recursively: false) {
+            mask.renderingOrder = 0
+            mask.geometry?.firstMaterial?.transparency = 0.000001
+        }
+        if let window = child?.childNode(withName: "window", recursively: false) {
+            window.renderingOrder = 0
+            window.geometry?.firstMaterial?.transparency = 0.000001
+        }
+    }
+    
+    func addPlane(nodeName: String, portalName: SCNNode, imageName: String) {
+        let child = portalName.childNode(withName: nodeName, recursively: false)
+        child?.renderingOrder = 200
+        child?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "Portal.scnassets/\(imageName).png")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+//
+//        // Create a session configuration
+//        let configuration = ARWorldTrackingConfiguration()
+//
+//        // Run the view's session
+//        sceneView.session.run(configuration)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-        
-        // Run the view's session
-        sceneView.session.run(configuration)
+        // Pause the view's session
+        sceneView.session.pause()
     }
     
     override func didReceiveMemoryWarning() {
@@ -58,6 +146,15 @@ class ExploreGalleryViewController: UIViewController, ARSCNViewDelegate {
         
     }
 
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        guard anchor is ARPlaneAnchor else {return}
+        DispatchQueue.main.async {
+            self.planeDetected.isHidden = false
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+            self.planeDetected.isHidden = true
+        }
+    }
     /*
     // MARK: - Navigation
 

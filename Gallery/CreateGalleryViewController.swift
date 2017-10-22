@@ -15,6 +15,8 @@ import Firebase
 import GoogleSignIn
 import GeoFire
 import MapKit
+import MobileCoreServices
+import AVKit
 
 
 class CreateGalleryViewController: UIViewController, ARSCNViewDelegate, UIImagePickerControllerDelegate,
@@ -23,6 +25,7 @@ UINavigationControllerDelegate {
     @IBOutlet var sceneView: ARSCNView!
     var locManager = CLLocationManager()
     var currentLocation: CLLocation!
+
     var portalCreated = false
     var allNodes: [SCNNode] = []
     var imageData: [Data] = []
@@ -36,7 +39,6 @@ UINavigationControllerDelegate {
     var imagePositions : [[UIImage:String]] = []
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // Set the view's delegate
         sceneView.delegate = self
         
@@ -89,13 +91,36 @@ UINavigationControllerDelegate {
         }
 		let nodeResults = sceneView.hitTest(touchLocation, options: nil)
 		for result in nodeResults {
-			if allNodes.contains(result.node) {
+			if allNodes.contains(result.node) && result.node.name != "video" {
 				targetNode = result.node
 				sceneView.session.pause()
 				chooseImageSource()
+			} else if allNodes.contains(result.node) && result.node.name == "video" {
+				targetNode = result.node
+				sceneView.session.pause()
+				if videoURL == nil {
+					chooseVideoSource()
+				} else {
+					playVideo(url: videoURL!)
+				}
 			}
 		}
     }
+	
+	@objc func playerDidFinishPlaying(note: NSNotification) {
+		sceneView.session.run(configuration)
+	}
+	
+	func playVideo(url: NSURL) {
+		let item = AVPlayerItem(url: url as URL)
+		NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: item)
+		let newPlayer = AVPlayer(playerItem: item)
+		let playerViewController = AVPlayerViewController()
+		playerViewController.player = newPlayer
+		self.present(playerViewController, animated: true) {
+			playerViewController.player!.play()
+		}
+	}
 	
 	var targetNode: SCNNode?
     
@@ -108,9 +133,9 @@ UINavigationControllerDelegate {
         let planeZposition = transform.columns.3.z
         portalNode.position = SCNVector3(planeXposition,planeYposition,planeZposition)
         self.sceneView.scene.rootNode.addChildNode(portalNode)
-        self.addWall(nodeName: "back", portalName: portalNode, imageName: "wall.png")
-        self.addWall(nodeName: "right", portalName: portalNode, imageName: "wall.png")
-        self.addWall(nodeName: "left", portalName: portalNode, imageName: "wall.png")
+        self.addWall(nodeName: "back", portalName: portalNode, imageName: "WallFront.png")
+        self.addWall(nodeName: "right", portalName: portalNode, imageName: "rightWall.png")
+        self.addWall(nodeName: "left", portalName: portalNode, imageName: "SideWall.png")
 		self.addWall(nodeName: "SideGreen", portalName: portalNode, imageName: "wall.png")
         self.addWall(nodeName: "SideRed", portalName: portalNode, imageName: "wall.png")
 		self.addFrame(nodeName: "backFrames", portalName: portalNode)
@@ -118,14 +143,24 @@ UINavigationControllerDelegate {
 		self.addFrame(nodeName: "rightFrames", portalName: portalNode)
         self.addPlane(nodeName: "roof", portalName: portalNode, imageName: "ceiling.png")
         self.addPlane(nodeName: "low", portalName: portalNode, imageName: "floor.png")
-		self.addLamp(nodeName: "lamp", portalName: portalNode)
+		self.addModel(nodeName: "lamp", portalName: portalNode)
+		self.addModel(nodeName: "table", portalName: portalNode)
+        if imagePositions != [] {
+            for each in imagePositions {
+                self.addimages(image: each[0], nodeName: each[1], portalName: portalNode)
+            }
+        }
     }
+
     func addimages(image: UIImage, nodeName: String, portalName: SCNNode) {
         let child = portalName.childNode(withName: nodeName, recursively: false)
         child?.geometry?.firstMaterial?.diffuse.contents = image
 
     }
 	func addLamp(nodeName: String, portalName: SCNNode) {
+
+	
+	func addModel(nodeName: String, portalName: SCNNode) {
 		let child = portalName.childNode(withName: nodeName, recursively: false)
 		child?.renderingOrder = 200
 		for nodes in (child?.childNodes)! {
@@ -181,12 +216,32 @@ UINavigationControllerDelegate {
 		sceneView.session.run(configuration)
 	}
 	
+	func chooseVideoSource() {
+		let image = UIImagePickerController()
+		image.delegate = self
+		let actionSheet = UIAlertController(title: "Video Source", message: "Please select a source", preferredStyle: .actionSheet)
+		actionSheet.addAction(UIAlertAction(title: "Library", style: .default, handler: {(action: UIAlertAction) in
+			image.sourceType = .photoLibrary
+			image.mediaTypes = [kUTTypeMovie as String]
+			image.allowsEditing = false
+			self.present(image, animated: true, completion: nil)
+		}))
+		actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+		self.present(actionSheet, animated: true, completion: nil)
+		sceneView.session.run(configuration)
+	}
+	
+	var videoURL: NSURL?
+	
 	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
 		if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
 			// set node image
 			targetNode?.geometry?.firstMaterial?.diffuse.contents = image
             imageData.append(UIImageJPEGRepresentation(image, 0.8)!)
             nodeNames.append((targetNode?.name)!)
+		}
+		if let video = info[UIImagePickerControllerMediaURL] as? NSURL {
+			videoURL = video
 		}
 		self.dismiss(animated: true, completion: nil)
 		sceneView.session.run(configuration)
@@ -307,8 +362,10 @@ UINavigationControllerDelegate {
      let node = SCNNode()
      
      return node
-     }     */
-    
+     }
+     */
+	
+
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard anchor is ARPlaneAnchor else {return}
         DispatchQueue.main.async {
