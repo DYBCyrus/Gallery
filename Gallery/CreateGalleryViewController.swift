@@ -65,7 +65,7 @@ UINavigationControllerDelegate {
 			if allNodes.contains(result.node) {
 				targetNode = result.node
 				sceneView.session.pause()
-				pickImage()
+				chooseImageSource()
 			}
 		}
     }
@@ -131,12 +131,23 @@ UINavigationControllerDelegate {
 		child?.geometry?.firstMaterial?.diffuse.contents = UIImage(named: "Portal.scnassets/\(imageName).png")
     }
 	
-	func pickImage() {
+	func chooseImageSource() {
 		let image = UIImagePickerController()
 		image.delegate = self
-		image.sourceType = UIImagePickerControllerSourceType.photoLibrary
-		image.allowsEditing = true
-		self.present(image, animated: true)
+		let actionSheet = UIAlertController(title: "Photo Source", message: "Please select a source", preferredStyle: .actionSheet)
+		actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: {(action: UIAlertAction) in
+			image.sourceType = .photoLibrary
+			image.allowsEditing = true
+			self.present(image, animated: true, completion: nil)
+		}))
+		actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: {(action: UIAlertAction) in
+			image.sourceType = .camera
+			image.allowsEditing = true
+			self.present(image, animated: true, completion: nil)
+		}))
+		actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+		self.present(actionSheet, animated: true, completion: nil)
+		sceneView.session.run(configuration)
 	}
 	
 	func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -150,7 +161,7 @@ UINavigationControllerDelegate {
 	}
 	
 	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-		self.dismiss(animated: false, completion: nil)
+		self.dismiss(animated: true, completion: nil)
 		sceneView.session.run(configuration)
 	}
     
