@@ -89,8 +89,9 @@
         <!--Tab Bar Controller-->
         <scene sceneID="8cU-96-z2h">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jai-aE-OqD" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tabBarController id="Xa0-ih-uqZ" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="feY-Lt-mID">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" itemPositioning="fill" id="feY-Lt-mID" colorLabel="IBBuiltInLabel-Red">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -100,7 +101,19 @@
                         <segue destination="BV1-FR-VrT" kind="relationship" relationship="viewControllers" id="hA7-va-glX"/>
                     </connections>
                 </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jai-aE-OqD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tabBar contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="q3a-LA-Thf" colorLabel="IBBuiltInLabel-Red">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <items>
+                        <tabBarItem title="Gallery" selectedImage="Image-1" id="vil-AN-Wwo">
+                            <color key="badgeColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                        </tabBarItem>
+                        <tabBarItem enabled="NO" title="Explore" selectedImage="av" id="eQw-1g-Ycl">
+                            <color key="badgeColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                        </tabBarItem>
+                    </items>
+                </tabBar>
             </objects>
             <point key="canvasLocation" x="-298" y="168"/>
         </scene>
@@ -108,7 +121,7 @@
         <scene sceneID="dMM-TH-HtH">
             <objects>
                 <navigationController id="a0R-Ph-vx9" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Gallery" id="ppP-b8-BG5"/>
+                    <tabBarItem key="tabBarItem" title="Gallery" image="icons8-clover" selectedImage="icons8-clover_filled" id="ppP-b8-BG5"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="evM-uG-UEM">
                         <rect key="frame" x="0.0" y="20" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -126,7 +139,7 @@
             <objects>
                 <viewController id="iwv-5j-YEB" customClass="GalleryTableViewController" customModule="Gallery" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dPJ-By-G0o">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BgZ-Cj-0u1">
@@ -185,7 +198,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="yCd-E2-42q"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Gallery" id="htP-a0-K3h"/>
+                    <tabBarItem key="tabBarItem" title="Gallery" selectedImage="icons8-clover_filled" id="htP-a0-K3h"/>
                     <navigationItem key="navigationItem" title="Gallery" id="HjB-IE-Vs0">
                         <barButtonItem key="leftBarButtonItem" style="plain" id="utd-vH-fv4">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="iUR-Mi-u9X">
@@ -211,7 +224,7 @@
             </objects>
             <point key="canvasLocation" x="1311.5942028985507" y="-451.63043478260875"/>
         </scene>
-        <!--Create Gallery View Controller-->
+        <!--Gallery-->
         <scene sceneID="XX2-NH-S7e">
             <objects>
                 <viewController id="HC9-WK-hr4" customClass="CreateGalleryViewController" customModule="Gallery" customModuleProvider="target" sceneMemberID="viewController">
@@ -264,6 +277,8 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="GOI-VV-cbv"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Gallery" selectedImage="icons8-clover_filled" id="Crd-uv-Vu5"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="planeDetected" destination="OKd-66-Ru1" id="gAw-5a-nmA"/>
                         <outlet property="sceneView" destination="DIg-13-ZjB" id="SJ7-Fh-FrH"/>
@@ -278,7 +293,7 @@
             <objects>
                 <viewController id="BV1-FR-VrT" customClass="ExploreGalleryViewController" customModule="Gallery" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WR6-5H-lIj">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x2S-YK-pjr">
@@ -315,7 +330,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QC8-ig-Y1l"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Explore" id="1Fb-0o-wfL"/>
+                    <tabBarItem key="tabBarItem" title="Explore" image="icons8-adventure 15-45-58-159" selectedImage="icons8-adventure_filled" id="1Fb-0o-wfL"/>
                     <connections>
                         <outlet property="sceneView" destination="x2S-YK-pjr" id="Pz1-X6-zjQ"/>
                     </connections>
@@ -326,11 +341,17 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Image-1" width="25" height="25"/>
         <image name="La" width="414" height="238"/>
         <image name="art1" width="280" height="280"/>
+        <image name="av" width="33" height="33"/>
+        <image name="icons8-adventure 15-45-58-159" width="25" height="25"/>
+        <image name="icons8-adventure_filled" width="25" height="25"/>
+        <image name="icons8-clover" width="25" height="25"/>
+        <image name="icons8-clover_filled" width="25" height="25"/>
         <image name="unnamed-2" width="414" height="736"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="pzY-Uj-NSD"/>
+        <segue reference="ByB-I4-qxW"/>
     </inferredMetricsTieBreakers>
 </document>
