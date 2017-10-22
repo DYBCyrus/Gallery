@@ -17,7 +17,8 @@ class ExploreGalleryViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var sceneView: ARSCNView!
     var galleryKey: String!
     let configuration = ARWorldTrackingConfiguration()
-    
+    var imagePositions : [(UIImage,String)] = []
+
     var ref: DatabaseReference!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +38,21 @@ class ExploreGalleryViewController: UIViewController, ARSCNViewDelegate {
         // Set the scene to the view
         ref = Database.database().reference()
         self.planeDetected.isHidden = true
+        if galleryKey != nil {
+            if let userID = Auth.auth().currentUser?.uid {
+                
+                ref.child("galleries").child(galleryKey).child("imageURLs").observe(.childAdded, with: {(snapshot) in
+                    if let nodeName = snapshot.key as? String {
+                        let actualURL = snapshot.value as? String
+                        let url = URL(string:actualURL!)
+                        let data = try? Data(contentsOf: url!)
+                        let image: UIImage = UIImage(data: data!)!
+                        self.imagePositions.append((image,nodeName))
+                    }
+                })
+            }
+            
+        }
     }
     
     @objc func handleTap(sender: UITapGestureRecognizer) {
@@ -60,9 +76,9 @@ class ExploreGalleryViewController: UIViewController, ARSCNViewDelegate {
         let planeZposition = transform.columns.3.z
         portalNode.position = SCNVector3(planeXposition,planeYposition,planeZposition)
         self.sceneView.scene.rootNode.addChildNode(portalNode)
-        self.addWall(nodeName: "back", portalName: portalNode, imageName: "wall.png")
-        self.addWall(nodeName: "right", portalName: portalNode, imageName: "wall.png")
-        self.addWall(nodeName: "left", portalName: portalNode, imageName: "wall.png")
+        self.addWall(nodeName: "back", portalName: portalNode, imageName: "WallFront.png")
+        self.addWall(nodeName: "right", portalName: portalNode, imageName: "rightWall.png")
+        self.addWall(nodeName: "left", portalName: portalNode, imageName: "SideWall.png")
         self.addWall(nodeName: "SideGreen", portalName: portalNode, imageName: "wall.png")
         self.addWall(nodeName: "SideRed", portalName: portalNode, imageName: "wall.png")
         self.addFrame(nodeName: "backFrames", portalName: portalNode)
@@ -70,10 +86,22 @@ class ExploreGalleryViewController: UIViewController, ARSCNViewDelegate {
         self.addFrame(nodeName: "rightFrames", portalName: portalNode)
         self.addPlane(nodeName: "roof", portalName: portalNode, imageName: "ceiling.png")
         self.addPlane(nodeName: "low", portalName: portalNode, imageName: "floor.png")
-        self.addLamp(nodeName: "lamp", portalName: portalNode)
+        self.addModel(nodeName: "lamp", portalName: portalNode)
+        self.addModel(nodeName: "table", portalName: portalNode)
+        if !imagePositions.isEmpty{
+            for each in imagePositions {
+                self.addimages(image: each.0, nodeName: each.1, portalName: portalNode)
+            }
+        }
     }
     
-    func addLamp(nodeName: String, portalName: SCNNode) {
+    func addimages(image: UIImage, nodeName: String, portalName: SCNNode) {
+        let child = portalName.childNode(withName: nodeName, recursively: true)
+        child?.geometry?.firstMaterial?.diffuse.contents = image
+    }
+    
+    
+    func addModel(nodeName: String, portalName: SCNNode) {
         let child = portalName.childNode(withName: nodeName, recursively: false)
         child?.renderingOrder = 200
         for nodes in (child?.childNodes)! {
