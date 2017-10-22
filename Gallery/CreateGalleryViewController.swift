@@ -36,7 +36,7 @@ UINavigationControllerDelegate {
     let configuration = ARWorldTrackingConfiguration()
     var geoFire: GeoFire!
     var existingGallery : [String] = []
-    var imagePositions : [[UIImage:String]] = []
+    var imagePositions : [(UIImage,String)] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         // Set the view's delegate
@@ -70,7 +70,7 @@ UINavigationControllerDelegate {
                         let url = URL(string:result[0])
                         let data = try? Data(contentsOf: url!)
                         let image: UIImage = UIImage(data: data!)!
-                        self.imagePositions.append([image:result[1]])
+                        self.imagePositions.append((image,result[1]))
                     }
                 })
             }
@@ -145,17 +145,17 @@ UINavigationControllerDelegate {
         self.addPlane(nodeName: "low", portalName: portalNode, imageName: "floor.png")
 		self.addModel(nodeName: "lamp", portalName: portalNode)
 		self.addModel(nodeName: "table", portalName: portalNode)
-        if imagePositions != [] {
+        if !imagePositions.isEmpty{
             for each in imagePositions {
-                self.addimages(image: each[0], nodeName: each[1], portalName: portalNode)
+                self.addimages(image: each.0, nodeName: each.1, portalName: portalNode)
             }
         }
     }
 
     func addimages(image: UIImage, nodeName: String, portalName: SCNNode) {
-        let child = portalName.childNode(withName: nodeName, recursively: false)
+        let child = portalName.childNode(withName: nodeName, recursively: true)
+        print(child?.name)
         child?.geometry?.firstMaterial?.diffuse.contents = image
-
     }
 
 	
