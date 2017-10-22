@@ -9,7 +9,10 @@ target 'Gallery' do
   pod 'Firebase/Core'
   pod 'Firebase/Auth'
   pod 'GoogleSignIn'
-  pod 'Firebase/Database'
+  pod 'Firebase/Database', '~>4.1.0'
   pod 'Firebase/Storage'
+  pod 'GooglePlaces'
+  pod 'GooglePlacePicker'
+  pod 'GoogleMaps'
   pod 'GeoFire', :git => 'https://github.com/firebase/geofire-objc.git'
 end
