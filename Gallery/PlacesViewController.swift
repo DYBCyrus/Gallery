@@ -12,9 +12,21 @@ import GoogleMaps
 import GooglePlacePicker
 import Firebase
 import GeoFire
+import GoogleSignIn
 
 class PlacesViewController: UIViewController, GMSMapViewDelegate {
     // Add a pair of UILabels in Interface Builder, and connect the outlets to these variables.
+    
+    @IBAction func tapped(_ sender: Any) {
+        let firebaseAuth = Auth.auth()
+        do {
+            try firebaseAuth.signOut()
+            GIDSignIn.sharedInstance().disconnect()
+            performSegue(withIdentifier: "logoutFromExplore", sender: self)
+        } catch let signOutError as NSError {
+            print ("Error signing out: %@", signOutError)
+        }
+    }
     var placesClient: GMSPlacesClient!
     var locManager = CLLocationManager()
     var currentLocation: CLLocation!
@@ -45,7 +57,7 @@ class PlacesViewController: UIViewController, GMSMapViewDelegate {
         let refreshButton = UIButton()
         let btnImage = UIImage(named: "refresh")
         refreshButton.setImage(btnImage, for: .normal)
-        refreshButton.frame = CGRect(x: 16, y: 38, width: 20, height: 20)
+        refreshButton.frame = CGRect(x: 30, y: 60, width: 40, height: 40)
         self.view.addSubview(refreshButton)
         
         refreshButton.addTarget(self, action: #selector(click), for: UIControlEvents.touchUpInside)

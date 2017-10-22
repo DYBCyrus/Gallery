@@ -22,7 +22,7 @@ class GalleryTableViewController: UIViewController, UITableViewDataSource, UITab
         do {
             try firebaseAuth.signOut()
             GIDSignIn.sharedInstance().disconnect()
-            performSegue(withIdentifier: "galleryToSignin", sender: self)
+            performSegue(withIdentifier: "logout", sender: self)
         } catch let signOutError as NSError {
             print ("Error signing out: %@", signOutError)
         }

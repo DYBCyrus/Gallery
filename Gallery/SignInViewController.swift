@@ -14,6 +14,7 @@ import FirebaseDatabase
 class SignInViewController: UIViewController, GIDSignInUIDelegate {
     var ref: DatabaseReference!
 
+    @IBOutlet weak var backgroundView: UIImageView!
     @IBOutlet weak var signinButton: GIDSignInButton!
     @IBOutlet weak var welcomeLabel: UILabel!
     @IBOutlet weak var signoutButton: UIButton!
@@ -32,6 +33,7 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         GIDSignIn.sharedInstance().uiDelegate = self
+        view.sendSubview(toBack: backgroundView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,6 +66,10 @@ class SignInViewController: UIViewController, GIDSignInUIDelegate {
                 print("ha")
             }
         }
+    }
+    
+    @IBAction func prepareForUnwind(segue: UIStoryboardSegue){
+        
     }
 
     /*
