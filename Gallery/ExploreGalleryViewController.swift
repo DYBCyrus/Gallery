@@ -139,7 +139,8 @@ class ExploreGalleryViewController: UIViewController, ARSCNViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//
+        sceneView.session.run(configuration)
+
 //        // Create a session configuration
 //        let configuration = ARWorldTrackingConfiguration()
 //
